@@ -1,0 +1,24 @@
+{
+  "name": "bossmodecg-client",
+  "version": "0.0.1",
+  "description": "BossmodeCG client for frontends and controls.",
+  "main": "dist",
+  "license": "MIT",
+  "scripts": {
+    "console": "babel-node",
+    "test": "eslint src && flow && jest --coverage",
+    "build": "babel src -d dist",
+    "precommit": "yarn test",
+    "prepush": "yarn test"
+  },
+  "dependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-plugin-transform-async-to-generator": "^6.22.0",
+    "babel-preset-env": "^1.2.2",
+    "babel-preset-es2017": "^6.22.0",
+    "eventemitter2": "^4.0.0",
+    "jsondiffpatch": "^0.2.4",
+    "lodash": "^4.17.4",
+    "socket.io-client": "^1.7.3"
+  }
+}
