@@ -1,6 +1,6 @@
 {
   "name": "@bossmodecg/client",
-  "version": "0.0.11",
+  "version": "0.1.0",
   "description": "BossmodeCG client for frontends and controls.",
   "main": "dist",
   "license": "MIT",
