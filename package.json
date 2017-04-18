@@ -1,6 +1,6 @@
 {
-  "name": "bossmodecg-client",
-  "version": "0.0.1",
+  "name": "@bossmodecg/client",
+  "version": "0.0.2",
   "description": "BossmodeCG client for frontends and controls.",
   "main": "dist",
   "license": "MIT",
@@ -19,6 +19,7 @@
     "eventemitter2": "^4.0.0",
     "jsondiffpatch": "^0.2.4",
     "lodash": "^4.17.4",
+    "moment": "^2.18.1",
     "socket.io-client": "^1.7.3"
   }
 }
