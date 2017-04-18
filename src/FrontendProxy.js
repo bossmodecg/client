@@ -1,5 +1,9 @@
-import Proxy from './Proxy';
+import ModuleProxy from './ModuleProxy';
 
-export default class FrontendProxy extends Proxy {
+/**
+ * FrontendProxy is a read-only representation of the server state and handles
+ * specific event notifications on a module-by-module basis.
+ */
+export default class FrontendProxy extends ModuleProxy {
 
 }

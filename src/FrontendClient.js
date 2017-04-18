@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import Client from './Client';
 
 import FrontendProxy from './FrontendProxy';

@@ -1,16 +1,13 @@
 {
   "name": "@bossmodecg/client",
-  "version": "0.0.2",
+  "version": "0.0.11",
   "description": "BossmodeCG client for frontends and controls.",
   "main": "dist",
   "license": "MIT",
-  "scripts": {
-    "console": "babel-node",
-    "test": "eslint src && flow && jest --coverage",
-    "build": "babel src -d dist",
-    "precommit": "yarn test",
-    "prepush": "yarn test"
+  "bugs": {
+    "url": "https://github.com/bossmodecg/client/issues"
   },
+  "repository": "github:bossmodecg/client",
   "dependencies": {
     "babel-cli": "^6.24.0",
     "babel-plugin-transform-async-to-generator": "^6.22.0",
@@ -21,5 +18,22 @@
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "socket.io-client": "^1.7.3"
+  },
+  "devDependencies": {
+    "eslint": "^3.18.0",
+    "eslint-config-airbnb": "latest",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^3.0.2 || ^4.0.0",
+    "eslint-plugin-react": "^6.9.0",
+    "husky": "^0.13.2",
+    "jest": "^19.0.2"
+  },
+  "scripts": {
+    "console": "babel-node",
+    "test": "eslint src && jest --coverage",
+    "build": "babel src -d dist",
+    "prepublish": "npm run build",
+    "precommit": "npm run test",
+    "prepush": "npm run test"
   }
 }

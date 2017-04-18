@@ -1,10 +1,9 @@
+import _ from 'lodash';
+import io from 'socket.io-client';
+
 import { EventEmitter2 } from 'eventemitter2';
 
 import { Logger } from './logger';
-
-import _ from 'lodash';
-import io from 'socket.io-client';
-const jsondiffpatch = require('jsondiffpatch').create({});
 
 const DEFAULT_CONFIG =
   Object.freeze(
@@ -12,7 +11,7 @@ const DEFAULT_CONFIG =
       broadcastUnrecognizedNamespaceEvents: false
     }
   );
-const CLIENT_TYPES = [ 'frontend', 'management' ];
+const CLIENT_TYPES = ['frontend', 'management'];
 
 const logger = new Logger("bossmodecg-client");
 
@@ -25,7 +24,7 @@ export default class Client extends EventEmitter2 {
 
     this._config = Object.freeze(_.merge({}, DEFAULT_CONFIG, config));
 
-    if (typeof(this._config.identifier) !== 'string') {
+    if (typeof this._config.identifier !== 'string') {
       throw new Error("BossmodeCG requires a string that identifies this client.");
     }
 
@@ -53,12 +52,12 @@ export default class Client extends EventEmitter2 {
   get isPopulated() { return this._isPopulated; }
 
   connect() {
-    logger.info(`Connecting to '${this._config.endpoint}'.`)
+    logger.info(`Connecting to '${this._config.endpoint}'.`);
 
     this._socket = io(this._config.endpoint, {
       reconnection: true,
       reconnectionDelay: 1000,
-      reconnectionDelayMax : 5000,
+      reconnectionDelayMax: 5000,
       reconnectionAttempts: Infinity
     });
 
@@ -124,12 +123,13 @@ export default class Client extends EventEmitter2 {
       logger.debug(`Full state sent by server.`);
 
       Object.keys(fullState).forEach((bmName) => {
-        var proxy = this._moduleProxies[bmName];
+        let proxy = this._moduleProxies[bmName];
 
         if (!proxy) {
-          logger.debug(`Instantiating proxy for '${bmName}'.`)
+          logger.debug(`Instantiating proxy for '${bmName}'.`);
+          proxy = this._createNewProxy(bmName);
 
-          this._moduleProxies[bmName] = proxy = this._createNewProxy(bmName);
+          this._moduleProxies[bmName] = proxy;
         }
 
         proxy._fullStateUpdate(fullState[bmName]);
@@ -152,7 +152,7 @@ export default class Client extends EventEmitter2 {
       }
 
       this.emit('bossmodecg.forceUpdate');
-    })
+    });
 
     socket.on('pushdownEvent', (pushdownEvent) => {
       logger.debug(`Pushdown event: ${pushdownEvent.eventName}`);
@@ -162,20 +162,19 @@ export default class Client extends EventEmitter2 {
       const localEventName = tokens[1];
 
       if (namespace === 'bossmodecg') {
-        this.emit(eventName, event);
+        this.emit(pushdownEvent.eventName, event);
       } else {
         const proxy = this._moduleProxies[namespace];
 
         if (proxy && localEventName) {
           proxy.emit(localEventName, event);
+        } if (this._config.broadcastUnrecognizedNamespaceEvents) {
+          // we can choose to broadcast events with unrecognized namespaces if we want.
+          this.emit(pushdownEvent.eventName, event);
         } else {
-          if (this._config.broadcastUnrecognizedNamespaceEvents) {
-            // we can choose to broadcast events with unrecognized namespaces if we want.
-            this.emit(eventName, event);
-          } else {
-            // otherwise, scream and drop it on the floor.
-            logger.warn(`Received event '${eventName}' with unrecognized/missing namespace.`);
-          }
+          // otherwise, scream and drop it on the floor.
+          logger.warn(`Received event '${pushdownEvent.eventName}' ` +
+                      "with unrecognized/missing namespace.");
         }
       }
 

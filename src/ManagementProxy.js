@@ -1,6 +1,10 @@
-import Proxy from './Proxy';
+import ModuleProxy from './ModuleProxy';
 
-export default class ManagementProxy extends Proxy {
+/**
+ * ManagementProxy encapsulates FrontendProxy, but enables state change and
+ * client-to-server messaging.
+ */
+export default class ManagementProxy extends ModuleProxy {
   constructor(client, bmName) {
     super(client, bmName);
 
@@ -8,10 +12,10 @@ export default class ManagementProxy extends Proxy {
   }
 
   pushEvent(eventName, event) {
-    this._client._socket.emit('pushupEvent', { bmName: this.name, eventName: eventName, event: event });
+    this._client._socket.emit('pushupEvent', { bmName: this.name, eventName, event });
   }
 
   setState(delta) {
-    this._client._socket.emit('stateDelta', { bmName: this.name, delta: delta });
+    this._client._socket.emit('stateDelta', { bmName: this.name, delta });
   }
 }
